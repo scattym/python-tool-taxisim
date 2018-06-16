@@ -9,4 +9,6 @@ exclude setup.cfg
 exclude *.txt
 exclude binaries
 exclude version.py
+exclude misc
 recursive-exclude binaries *
+recursive-exclude misc *
