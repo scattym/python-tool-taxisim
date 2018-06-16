@@ -1,0 +1,10 @@
+dist
+taxisim.egg-info
+build
+*.pyc
+.cache
+nose2-junit.xml
+coverage.xml
+.coverage
+*.idea
+.python-version

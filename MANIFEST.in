@@ -1,0 +1,12 @@
+include *.md
+include unittest.cfg
+include CHANGELOG
+exclude .project
+exclude .pydevproject
+exclude .settings/*
+exclude .settings
+exclude setup.cfg
+exclude *.txt
+exclude binaries
+exclude version.py
+recursive-exclude binaries *

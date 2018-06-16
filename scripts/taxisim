@@ -1,0 +1,218 @@
+import binascii
+import datetime
+from time import sleep
+
+import serial as serial
+
+EPOCH = datetime.datetime(1970, 1, 1)
+
+
+class VacancyCommand(object):
+    def __init__(self):
+        self.date = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.serial = b"12345678"
+        self.passenger_on_board = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.passenger_exit_time = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.passenger_travel_distance = 0
+        self.passenger_travel_time = 0
+        self.passenger_wait_time = 0
+        self.total_fare_16 = 0
+        self.car_speed = 0
+        self.passenger_on_board_long = 0
+        self.passenger_on_board_lat = 0
+        self.passenger_exit_board_long = 0
+        self.passenger_exit_board_lat = 0
+        self.taxi_meter_device_no = b"87654321"
+        self.receipt_number = 0
+        self.total_fare_32 = 0
+        self.driver_id = b"2143658721436587"
+        self.k_constant = 0
+
+    def __bytes__(self):
+        return b"".join(
+            [
+                self.date.to_bytes(4, 'big'),
+                self.serial,
+                self.passenger_on_board.to_bytes(4, 'big'),
+                self.passenger_exit_time.to_bytes(4, 'big'),
+                self.passenger_travel_distance.to_bytes(4, 'big'),
+                self.passenger_travel_time.to_bytes(2, 'big'),
+                self.passenger_wait_time.to_bytes(2, 'big'),
+                self.total_fare_16.to_bytes(2, 'big'),
+                self.car_speed.to_bytes(2, 'big'),
+                self.passenger_on_board_long.to_bytes(4, 'big'),
+                self.passenger_on_board_lat.to_bytes(4, 'big'),
+                self.passenger_exit_board_long.to_bytes(4, 'big'),
+                self.passenger_exit_board_lat.to_bytes(4, 'big'),
+                self.taxi_meter_device_no,
+                self.receipt_number.to_bytes(4, 'big'),
+                self.total_fare_32.to_bytes(4, 'big'),
+                self.driver_id,
+                self.k_constant.to_bytes(4, 'big')
+            ]
+        )
+
+    def __str__(self):
+        return "{}".format(binascii.hexlify(self.__bytes__()))
+
+    @staticmethod
+    def length():
+        return 84
+
+    @staticmethod
+    def command():
+        return binascii.unhexlify("C1")
+
+
+class OccupiedCommand(object):
+    def __init__(self):
+        self.date = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.serial = b"12345678"
+        self.car_speed = 0
+        self.passenger_travel_distance = 0
+        self.passenger_travel_time = 0
+        self.passenger_wait_time = 0
+        self.total_fare_16 = 0
+
+    def __bytes__(self):
+        return b"".join(
+            [
+                self.date.to_bytes(4, 'big'),
+                self.serial,
+                self.car_speed.to_bytes(2, 'big'),
+                b"000000",
+                self.passenger_travel_distance.to_bytes(4, 'big'),
+                self.passenger_travel_time.to_bytes(2, 'big'),
+                self.passenger_wait_time.to_bytes(2, 'big'),
+                self.total_fare_16.to_bytes(2, 'big'),
+            ]
+        )
+
+    def __str__(self):
+        return "{}".format(binascii.hexlify(self.__bytes__()))
+
+    def __repr__(self):
+        return self.date.to_bytes(4, 'big')
+
+    @staticmethod
+    def length():
+        return 30
+
+    @staticmethod
+    def command():
+        return binascii.unhexlify("C2")
+
+
+class PrintCommand(object):
+    def __init__(self):
+        self.date = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.serial = b"12345678"
+        self.passenger_on_board = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.passenger_exit_time = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
+        self.passenger_travel_distance = 0
+        self.passenger_travel_time = 0
+        self.passenger_wait_time = 0
+        self.total_fare_16 = 0
+        self.car_speed = 0
+        self.passenger_on_board_long = 0
+        self.passenger_on_board_lat = 0
+        self.passenger_exit_board_long = 0
+        self.passenger_exit_board_lat = 0
+        self.taxi_meter_device_no = b"87654321"
+        self.receipt_number = 0
+        self.total_fare_32 = 0
+        self.driver_id = b"2143658721436587"
+        self.k_constant = 0
+
+    def __bytes__(self):
+        return b"".join(
+            [
+                self.date.to_bytes(4, 'big'),
+                self.serial,
+                self.passenger_on_board.to_bytes(4, 'big'),
+                self.passenger_exit_time.to_bytes(4, 'big'),
+                self.passenger_travel_distance.to_bytes(4, 'big'),
+                self.passenger_travel_time.to_bytes(2, 'big'),
+                self.passenger_wait_time.to_bytes(2, 'big'),
+                self.total_fare_16.to_bytes(2, 'big'),
+                self.car_speed.to_bytes(2, 'big'),
+                self.passenger_on_board_long.to_bytes(4, 'big'),
+                self.passenger_on_board_lat.to_bytes(4, 'big'),
+                self.passenger_exit_board_long.to_bytes(4, 'big'),
+                self.passenger_exit_board_lat.to_bytes(4, 'big'),
+                self.taxi_meter_device_no,
+                self.receipt_number.to_bytes(4, 'big'),
+                self.total_fare_32.to_bytes(4, 'big'),
+                self.driver_id,
+                self.k_constant.to_bytes(4, 'big')
+            ]
+        )
+
+    def __str__(self):
+        return "{}".format(binascii.hexlify(self.__bytes__()))
+
+    @staticmethod
+    def length():
+        return 84
+
+    @staticmethod
+    def command():
+        return binascii.unhexlify("B4")
+
+
+class GWP5043Payload(object):
+    def __init__(self):
+        self.stx = binascii.unhexlify("02")
+        self.etx = binascii.unhexlify("03")
+        self.dle = binascii.unhexlify("10")
+        self.command = None
+
+    def __bytes__(self):
+        return b"".join(
+            [
+                self.stx,
+                self.command.command(),
+                self.command.length().to_bytes(4, 'big'),
+                self.command.__bytes__(),
+                self.etx,
+                self.dle
+            ]
+        )
+
+    def __str__(self):
+        return "{}".format(binascii.hexlify(self.__bytes__()))
+
+
+def open_rs232(speed=115200):
+    device = "rfc2217://localhost:9990"
+    try:
+        serial_port = serial.serial_for_url(device, speed, timeout=5)
+    except ValueError as err:
+        if err.message == "remote rejected value for option 'baud rate'":
+            serial_port = serial.serial_for_url(device, timeout=5)
+    return serial_port
+
+
+if __name__ == "__main__":
+    msg = GWP5043Payload()
+
+    print(msg)
+    test = VacancyCommand()
+
+    serial_port = open_rs232(115200)
+
+    test_gwp = GWP5043Payload()
+    while True:
+        for i in range(0, 10):
+            test_gwp.command = VacancyCommand()
+            serial_port.write(bytes(test_gwp))
+            sleep(1)
+        for i in range(0, 10):
+            test_gwp.command = OccupiedCommand()
+            serial_port.write(bytes(test_gwp))
+            sleep(1)
+        test_gwp.command = PrintCommand()
+        serial_port.write(bytes(test_gwp))
+        sleep(10)
+
+
