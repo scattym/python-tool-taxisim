@@ -14,19 +14,19 @@ class VacancyCommand(object):
         self.passenger_on_board = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
         self.passenger_exit_time = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
         self.passenger_travel_distance = 10
-        self.passenger_travel_time = 10
-        self.passenger_wait_time = 10
-        self.total_fare_16 = 10
-        self.car_speed = 10
+        self.passenger_travel_time = 11
+        self.passenger_wait_time = 12
+        self.total_fare_16 = 13
+        self.car_speed = 14
         self.passenger_on_board_long = 0
         self.passenger_on_board_lat = 0
         self.passenger_exit_board_long = 0
         self.passenger_exit_board_lat = 0
         self.taxi_meter_device_no = b"87654321"
-        self.receipt_number = 10
-        self.total_fare_32 = 10
+        self.receipt_number = 15
+        self.total_fare_32 = 17
         self.driver_id = b"2143658721436587"
-        self.k_constant = 10
+        self.k_constant = 17
 
     def __bytes__(self):
         return b"".join(
@@ -69,10 +69,10 @@ class OccupiedCommand(object):
         self.date = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
         self.serial = b"12345678"
         self.car_speed = 20
-        self.passenger_travel_distance = 20
-        self.passenger_travel_time = 20
-        self.passenger_wait_time = 20
-        self.total_fare_16 = 20
+        self.passenger_travel_distance = 21
+        self.passenger_travel_time = 22
+        self.passenger_wait_time = 23
+        self.total_fare_16 = 24
 
     def __bytes__(self):
         return b"".join(
@@ -110,19 +110,19 @@ class PrintCommand(object):
         self.passenger_on_board = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
         self.passenger_exit_time = int((datetime.datetime.utcnow() - EPOCH).total_seconds())
         self.passenger_travel_distance = 30
-        self.passenger_travel_time = 30
-        self.passenger_wait_time = 30
-        self.total_fare_16 = 30
-        self.car_speed = 30
+        self.passenger_travel_time = 31
+        self.passenger_wait_time = 32
+        self.total_fare_16 = 33
+        self.car_speed = 34
         self.passenger_on_board_long = 30
         self.passenger_on_board_lat = 30
         self.passenger_exit_board_long = 30
         self.passenger_exit_board_lat = 30
         self.taxi_meter_device_no = b"87654321"
-        self.receipt_number = 30
-        self.total_fare_32 = 30
+        self.receipt_number = 35
+        self.total_fare_32 = 36
         self.driver_id = b"2143658721436587"
-        self.k_constant = 30
+        self.k_constant = 37
 
     def __bytes__(self):
         return b"".join(
