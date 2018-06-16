@@ -186,8 +186,6 @@ class GWP5043Payload(object):
 def open_rs232(speed=115200):
     device = "rfc2217://localhost:9990"
     try:
-        serial_port = serial.Serial()
-        serial_port.port = "rfc2217://localhost:9990"
         serial_port = serial.serial_for_url(device, int(speed), timeout=int(5))
     except ValueError as err:
         if err.message == "remote rejected value for option 'baud rate'":
@@ -201,7 +199,7 @@ if __name__ == "__main__":
     # print(msg)
     # test = VacancyCommand()
 
-    serial_port = open_rs232(115200)
+    serial_port = open_rs232()
 
     test_gwp = GWP5043Payload()
     while True:
@@ -210,7 +208,7 @@ if __name__ == "__main__":
             serial_port.write(bytes(test_gwp))
             print(binascii.hexlify(bytes(test_gwp)))
             sleep(1)
-        for i in range(0, 10):
+        for i in range(0, 600):
             test_gwp.command = OccupiedCommand()
             serial_port.write(bytes(test_gwp))
             print(binascii.hexlify(bytes(test_gwp)))
@@ -218,8 +216,8 @@ if __name__ == "__main__":
         test_gwp.command = PrintCommand()
         serial_port.write(bytes(test_gwp))
         print(binascii.hexlify(bytes(test_gwp)))
-        sleep(10)
-        data = serial_port.read(4192)
+        sleep(1200)
+        data = serial_port.read(8192)
         print(data)
 
 
