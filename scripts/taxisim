@@ -1,6 +1,10 @@
 import binascii
 import datetime
+import sys
 from time import sleep
+import logging
+import argparse
+import os
 
 import serial as serial
 
@@ -184,7 +188,7 @@ class GWP5043Payload(object):
 
 
 def open_rs232(speed=115200):
-    device = "rfc2217://localhost:9990"
+    device = "rfc2217://10.1.1.6:9990"
     try:
         serial_port = serial.Serial()
         serial_port.port = "rfc2217://localhost:9990"
@@ -201,25 +205,107 @@ if __name__ == "__main__":
     # print(msg)
     # test = VacancyCommand()
 
-    serial_port = open_rs232(115200)
+
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        '-a',
+        '--occupied',
+        help="Don't send data on serial link. Just print.",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        '-b',
+        '--vacancy',
+        help="Don't send data on serial link. Just print.",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        '-c',
+        '--print-command',
+        help="Don't send data on serial link. Just print.",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        '-n',
+        '--dry-run',
+        help="Don't send data on serial link. Just print.",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        '-v',
+        dest='debug',
+        help=("Increase the logging level. Can specify this option multiple "
+              "times for more detail."),
+        action="count",
+        default=int(os.environ.get('DEBUG_LEVEL', 0))
+    )
+
+    args = parser.parse_args()
+
+    log_level = 16 - args.debug
+
+    logger = logging.getLogger('')
+    logger.setLevel(logging.INFO)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        '%(asctime)s - %(process)d - %(levelname)s - %(name)s - %(lineno)d - %(message)s'
+    )
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
+
+    if args.debug:
+        logger.setLevel(log_level)
+        ch.setLevel(log_level)
+
+    if not args.dry_run:
+        serial_port = open_rs232(115200)
 
     test_gwp = GWP5043Payload()
-    while True:
-        for i in range(0, 10):
-            test_gwp.command = VacancyCommand()
-            serial_port.write(bytes(test_gwp))
-            print(binascii.hexlify(bytes(test_gwp)))
-            sleep(1)
-        for i in range(0, 10):
-            test_gwp.command = OccupiedCommand()
-            serial_port.write(bytes(test_gwp))
-            print(binascii.hexlify(bytes(test_gwp)))
-            sleep(1)
+
+    if args.occupied:
+        test_gwp.command = OccupiedCommand()
+        serial_port.write(bytes(test_gwp))
+        print(binascii.hexlify(bytes(test_gwp)))
+    if args.vacancy:
+        test_gwp.command = VacancyCommand()
+        serial_port.write(bytes(test_gwp))
+        print(binascii.hexlify(bytes(test_gwp)))
+    if args.print_command:
         test_gwp.command = PrintCommand()
         serial_port.write(bytes(test_gwp))
         print(binascii.hexlify(bytes(test_gwp)))
+    if args.occupied or args.vacancy or args.print_command:
+        sys.exit(0)
+
+    while True:
+        for i in range(0, 10):
+            test_gwp.command = OccupiedCommand()
+            if not args.dry_run:
+                serial_port.write(bytes(test_gwp))
+            print(binascii.hexlify(bytes(test_gwp)))
+            sleep(1)
+        for i in range(0, 1):
+            test_gwp.command = VacancyCommand()
+            if not args.dry_run:
+                serial_port.write(bytes(test_gwp))
+            print(binascii.hexlify(bytes(test_gwp)))
+            sleep(1)
+        test_gwp.command = PrintCommand()
+        if not args.dry_run:
+            serial_port.write(bytes(test_gwp))
+        print(binascii.hexlify(bytes(test_gwp)))
         sleep(10)
-        data = serial_port.read(4192)
+        if not args.dry_run:
+            data = serial_port.read(4192)
         print(data)
 
 
