@@ -28,9 +28,9 @@ class VacancyCommand(object):
         self.passenger_exit_board_lat = 0
         self.taxi_meter_device_no = b"87654321"
         self.receipt_number = 15
-        self.total_fare_32 = 17
+        self.total_fare_32 = 13
         self.driver_id = b"2143658721436587"
-        self.k_constant = 17
+        self.k_constant = 16
 
     def __bytes__(self):
         return b"".join(
