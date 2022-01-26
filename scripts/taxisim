@@ -187,7 +187,7 @@ class GWP5043Payload(object):
         return "{}".format(binascii.hexlify(self.__bytes__()))
 
 
-def open_rs232(speed=115200):
+def open_rs232(device="rfc2217://10.1.1.6:9990", speed=115200):
     device = "rfc2217://10.1.1.6:9990"
     try:
         serial_port = serial.serial_for_url(device, int(speed), timeout=int(5))
@@ -205,29 +205,36 @@ if __name__ == "__main__":
     parser.add_argument(
         '-a',
         '--occupied',
-        help="Don't send data on serial link. Just print.",
+        help="Send occupied message.",
         action="store_true",
         default=False,
     )
     parser.add_argument(
         '-b',
         '--vacancy',
-        help="Don't send data on serial link. Just print.",
+        help="Send vacancy message.",
         action="store_true",
         default=False,
     )
     parser.add_argument(
         '-c',
         '--print-command',
-        help="Don't send data on serial link. Just print.",
+        help="Send print message.",
         action="store_true",
         default=False,
     )
 
     parser.add_argument(
+        '-d',
+        '--device',
+        help="The serial port device to open. Defaults to lab serial2ip entry.",
+        default="rfc2217://10.1.1.6:9990",
+    )
+
+    parser.add_argument(
         '-n',
         '--dry-run',
-        help="Don't send data on serial link. Just print.",
+        help="Don't send data on serial link. Just print to the screen.",
         action="store_true",
         default=False,
     )
@@ -260,7 +267,7 @@ if __name__ == "__main__":
         ch.setLevel(log_level)
 
     if not args.dry_run:
-        serial_port = open_rs232()
+        serial_port = open_rs232(args.device)
 
     test_gwp = GWP5043Payload()
 
