@@ -1,6 +1,6 @@
 # Tools for simulating taxi protocols
 
-This tool currently implements the GWP5043 format of taxi data, notifying of fare start/end etc
+This tool currently implements the GWP5043 format of taxi data, notifying of fare start/end etc. This is the protocol used by taxi fare meters in a number of different countries.
 
 It is a very simple POC based around send data over a serial connection, in the lab this is a serial over IP connection however this can be any seriaal connection
 
